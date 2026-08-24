@@ -36,9 +36,10 @@
 
 /* Red decorative border under the title */
 .section-title-underline {
-  width: 50px;
+  width: 56px;
   height: 4px;
-  background-color: var(--primary);
+  background: linear-gradient(90deg, var(--primary), var(--primary-deep));
+  box-shadow: 0 0 12px var(--primary-glow);
   margin-top: var(--space-sm);
   border-radius: var(--radius-full);
 }

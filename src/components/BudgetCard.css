@@ -17,10 +17,12 @@
 }
 
 .budget-card {
-  background-color: var(--light-100);
-  border: 1px solid var(--light-200);
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  padding: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
   text-align: left;
   cursor: pointer;
   display: flex;
@@ -30,14 +32,9 @@
 }
 
 .budget-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   border-color: var(--primary-border);
-  background-color: var(--white);
-  box-shadow: var(--shadow-md);
-}
-
-[data-theme="dark"] .budget-card {
-  border-color: var(--light-300);
+  box-shadow: var(--shadow-md), 0 0 22px -14px var(--primary-glow);
 }
 
 .budget-info {

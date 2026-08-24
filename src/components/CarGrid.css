@@ -5,7 +5,7 @@
 
 .cargrid-section {
   padding: var(--space-2xl) 0;
-  background-color: var(--light-100);
+  background-color: transparent;
 }
 
 .cargrid-header {
@@ -13,7 +13,7 @@
   align-items: baseline;
   justify-content: space-between;
   margin-bottom: var(--space-lg);
-  border-bottom: 1.5px solid var(--light-200);
+  border-bottom: 1.5px solid var(--hairline);
   padding-bottom: var(--space-sm);
   flex-wrap: wrap;
   gap: var(--space-sm);
@@ -39,7 +39,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-2xl) var(--space-md);
-  background-color: var(--white);
+  background-color: var(--glass-bg);
   border-radius: var(--radius-lg);
   border: 1.5px dashed var(--light-300);
   text-align: center;
