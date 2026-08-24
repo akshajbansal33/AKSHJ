@@ -1,0 +1,299 @@
+/* 
+  Home Page and Modal Overlay Stylesheet
+  Demonstrates: CSS Grid layouts, flex grids, absolute icons, glassmorphism modal panels, and responsive media query blocks.
+*/
+
+.section-wrapper {
+  padding: var(--space-2xl) 0;
+  border-bottom: 1px solid var(--light-200);
+}
+
+.section-wrapper:nth-child(even) {
+  background-color: var(--light-100);
+}
+
+/* Why Choose Torque Talk Section Grid */
+.why-us-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl);
+  margin-top: var(--space-lg);
+}
+
+.why-us-card {
+  background-color: var(--white);
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--light-200);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  transition: transform var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.why-us-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.why-us-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-size: 1.75rem;
+  margin-bottom: var(--space-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.why-us-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dark-900);
+}
+
+.why-us-desc {
+  font-size: 0.9rem;
+  color: var(--dark-600);
+  line-height: 1.5;
+}
+
+/* 
+  Car Details Modal Overlay Styles
+ */
+.details-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.details-modal-box {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 750px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  animation: modalSlideUp 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--light-200);
+}
+
+.details-modal-header {
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--light-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.details-modal-header h3 {
+  font-size: 1.5rem;
+}
+
+.btn-details-close {
+  color: var(--dark-600);
+  padding: 4px;
+  border-radius: var(--radius-full);
+}
+
+.btn-details-close:hover {
+  background-color: var(--light-100);
+  color: var(--primary);
+}
+
+.details-modal-body {
+  padding: var(--space-lg);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--space-lg);
+}
+
+.details-modal-img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--light-300);
+}
+
+.details-info-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.details-meta-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.details-brand {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--dark-600);
+  letter-spacing: 0.5px;
+}
+
+.details-name {
+  font-size: 1.75rem;
+  color: var(--dark-900);
+  font-family: var(--font-heading);
+}
+
+.details-price {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-top: 4px;
+}
+
+/* Detail Tech Specs Table */
+.details-specs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.details-specs-table tr {
+  border-bottom: 1px solid var(--light-200);
+}
+
+.details-specs-table tr:last-child {
+  border-bottom: none;
+}
+
+.details-specs-table th {
+  text-align: left;
+  padding: var(--space-sm) 0;
+  font-size: 0.85rem;
+  color: var(--dark-600);
+  width: 45%;
+}
+
+.details-specs-table td {
+  padding: var(--space-sm) 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--dark-900);
+}
+
+.details-modal-footer {
+  padding: var(--space-lg);
+  border-top: 1px solid var(--light-200);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-md);
+}
+
+.btn-details-compare {
+  background-color: var(--primary);
+  color: var(--white);
+  font-weight: 600;
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+}
+
+.btn-details-compare:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-details-compare.active {
+  background-color: var(--dark-900);
+}
+
+/* Responsive modal formatting */
+@media (max-width: 768px) {
+  .why-us-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  
+  .details-modal-body {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  
+  .details-modal-img {
+    height: 180px;
+  }
+}
+
+/* Dedicated Page Layout Styles */
+.page-hero {
+  background: linear-gradient(135deg, var(--secondary-bg, #1e293b) 0%, var(--primary-bg, #0f172a) 100%);
+  padding: 60px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--light-200, #e2e8f0);
+  width: 100%;
+}
+
+[data-theme="dark"] .page-hero {
+  border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.page-hero h1 {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--white, #ffffff);
+  margin-bottom: var(--space-xs, 12px);
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-hero p {
+  font-size: 1.15rem;
+  color: var(--dark-300, #94a3b8);
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.page-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs, 8px);
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: var(--space-lg, 24px);
+  font-family: var(--font-heading);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 1rem;
+}
+
+.page-back-btn:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+
+

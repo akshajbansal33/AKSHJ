@@ -1,0 +1,1897 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torque Talk Project Documentation & Code Flow Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --secondary: #0f172a;
+      --accent: #2563eb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #334155;
+      --text-bold: #0f172a;
+      --code-bg: #1e293b;
+      --code-text: #f1f5f9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      padding: 40px 20px;
+    }
+
+    .report-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    header {
+      background-color: var(--secondary);
+      color: white;
+      padding: 40px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+
+    header h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .meta-box {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      gap: 30px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      color: var(--text-bold);
+      margin-top: 40px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .flow-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 40px;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    }
+
+    .flow-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .flow-step {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+    }
+
+    .flow-step-num {
+      background-color: var(--accent);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+
+    .flow-step-text strong {
+      color: var(--text-bold);
+    }
+
+    .file-container {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 50px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    }
+
+    .file-header {
+      background-color: #f1f5f9;
+      padding: 15px 25px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .file-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+
+    .file-path {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      background-color: var(--border);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .file-body {
+      padding: 25px;
+    }
+
+    .file-description {
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 20px;
+      padding-left: 15px;
+      border-left: 4px solid var(--accent);
+    }
+
+    .code-wrapper {
+      background-color: var(--code-bg);
+      border-radius: 8px;
+      overflow: auto;
+      max-height: 450px;
+      margin-bottom: 25px;
+    }
+
+    .code-wrapper pre {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--code-text);
+      white-space: pre-wrap;
+    }
+
+    .explanation-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      color: var(--text-bold);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .explanation-list {
+      padding-left: 20px;
+    }
+
+    .explanation-list li {
+      margin-bottom: 10px;
+    }
+
+    .explanation-list li code {
+      background-color: #f1f5f9;
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+    }
+
+    /* Print styling rules */
+    @media print {
+      body {
+        background-color: white;
+        padding: 0;
+        font-size: 11pt;
+      }
+      .report-container {
+        max-width: 100%;
+      }
+      header {
+        border-radius: 0;
+        box-shadow: none;
+        background-color: white;
+        color: black;
+        border-bottom: 3px solid black;
+        padding: 20px 0;
+      }
+      header h1 {
+        font-size: 24pt;
+        color: black;
+      }
+      header p {
+        color: #555;
+      }
+      .meta-box {
+        color: #555;
+        border-top: 1px solid #ccc;
+      }
+      .flow-card, .file-container {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+        margin-bottom: 30px;
+      }
+      .file-header {
+        background-color: #eee;
+        border-bottom: 1px solid #ccc;
+      }
+      .code-wrapper {
+        background-color: white;
+        color: black;
+        border: 1px solid #ccc;
+        max-height: none;
+        overflow: visible;
+      }
+      .code-wrapper pre {
+        color: black;
+        font-size: 9pt;
+      }
+      .section-title {
+        page-break-before: always;
+        color: black;
+        border-bottom: 2px solid black;
+      }
+      .explanation-list li code {
+        background-color: #eee;
+        color: black;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="report-container">
+    <header>
+      <h1>Torque Talk</h1>
+      <p>Academic React Project: Codebase Walkthrough & Interactive Flow Report</p>
+      <div class="meta-box">
+        <div><strong>Course:</strong> Front End Engineering-II</div>
+        <div><strong>Framework:</strong> React 19 (Vite)</div>
+        <div><strong>State Management:</strong> Lifted Component State & Custom Hooks</div>
+      </div>
+    </header>
+
+    <h2 class="section-title">I. Interactive User Flow & Routing Guide</h2>
+    
+    <div class="flow-card">
+      <h3>1. What happens when you click "New Car" or "Used Car" tabs?</h3>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-step-num">1</div>
+          <div class="flow-step-text">
+            <strong>State Trigger:</strong> Clicking the tab triggers <code>setActiveTab('new' | 'used')</code>.
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">2</div>
+          <div class="flow-step-text">
+            <strong>Hook Update:</strong> The active tab state updates inside the <code>useCarFilter</code> custom hook.
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">3</div>
+          <div class="flow-step-text">
+            <strong>Dynamic Recalculation:</strong> The main page re-renders, recalculating card counts (e.g. SUV, Hatchback) and budget availabilities matching <em>only</em> that tab's state.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-card">
+      <h3>2. What happens when you click an Explore Card (Body Type or Budget)?</h3>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-step-num">1</div>
+          <div class="flow-step-text">
+            <strong>Click Bubble-up:</strong> The card calls its <code>onClick</code> prop, passing the card's specific filter name (e.g. <code>'SUV'</code> or <code>'luxury'</code>).
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">2</div>
+          <div class="flow-step-text">
+            <strong>Filter Application:</strong> The callback invokes <code>handleFilterChange('bodyType' | 'budget', value)</code> in <code>Home.jsx</code>, changing the filtering criteria inside the custom hook.
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">3</div>
+          <div class="flow-step-text">
+            <strong>Smooth Scrolling:</strong> The page automatically scrolls to the listing grid via <code>scrollToCatalog()</code>, showing the filtered cars.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-card">
+      <h3>3. What happens when you click "Compare" on a vehicle card?</h3>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-step-num">1</div>
+          <div class="flow-step-text">
+            <strong>State Array Shift:</strong> The card invokes <code>handleCompareToggle(car)</code> in the parent <code>Home.jsx</code>.
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">2</div>
+          <div class="flow-step-text">
+            <strong>Limit Check:</strong> If the car is not in the array and the array has less than 3 elements, it is added. If already present, it is filtered out.
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">3</div>
+          <div class="flow-step-text">
+            <strong>Drawer Popup:</strong> The comparison drawer rises from the screen's bottom, rendering the comparison modal options.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">II. Step-by-Step Codebase Walkthrough</h2>
+
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">1. HTML Entry Point (index.html)</span>
+        <span class="file-path">index.html</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          This is the very first file the browser loads. It sets up the meta tags, loads the Google Fonts for clean typography, and initializes the dark/light mode theme using a small blocking script in the head to prevent page flickering (FOUC). In the body, it has an empty root div where React mounts the entire app.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;link rel=&quot;icon&quot; type=&quot;image/svg+xml&quot; href=&quot;/vite.svg&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+    &lt;meta name=&quot;description&quot; content=&quot;Torque Talk - Explore, compare, and discover the best new and used cars in India that fit your lifestyle and budget.&quot; /&gt;
+    
+    &lt;!-- Theme initialization to prevent FOUC --&gt;
+    &lt;script&gt;
+      (function() {
+        const savedTheme = localStorage.getItem(&#039;theme&#039;) || &#039;light&#039;;
+        document.documentElement.setAttribute(&#039;data-theme&#039;, savedTheme);
+      })();
+    &lt;/script&gt;
+    
+    &lt;!-- Google Fonts for premium typography --&gt;
+    &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+    &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+    
+    &lt;title&gt;Torque Talk | Find Your Perfect Car&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&quot;root&quot;&gt;&lt;/div&gt;
+    &lt;script type=&quot;module&quot; src=&quot;/src/main.jsx&quot;&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>Line 13 (Theme script)</strong>: Instantly reads the theme from <code>localStorage</code> and applies it to the document element before any React code runs. This avoids flashing white on page refresh if dark mode is active.</li>
+        <li><strong>Line 25 (Root Div)</strong>: The empty container <code>&lt;div id="root"&gt;&lt;/div&gt;</code> that React target mounts.</li>
+        <li><strong>Line 26 (Script entry point)</strong>: Imports <code>main.jsx</code> as a ES6 module.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">2. The React Bootstrapper (src/main.jsx)</span>
+        <span class="file-path">src/main.jsx</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          This file binds React to your physical HTML page. It imports the virtual DOM client creator, global stylesheets, and the App root component.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>import { StrictMode } from &#039;react&#039;
+import { createRoot } from &#039;react-dom/client&#039;
+import &#039;./index.css&#039;
+import App from &#039;./App.jsx&#039;
+
+createRoot(document.getElementById(&#039;root&#039;)).render(
+  &lt;StrictMode&gt;
+    &lt;App /&gt;
+  &lt;/StrictMode&gt;,
+)
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>Line 2 (createRoot)</strong>: Imports the React 19 root renderer.</li>
+        <li><strong>Line 6 (Rendering)</strong>: Targets the <code>div id="root"</code> inside <code>index.html</code> and injects the <code>&lt;App /&gt;</code> component inside a StrictMode wrapper for debugging.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">3. Root Component (src/App.jsx)</span>
+        <span class="file-path">src/App.jsx</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          The main root level React component. In this initial phase, it acts as a container directly rendering our Home page dashboard. Later, you can wrap it in React Router tags for multi-page paths.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>import React from &#039;react&#039;;
+import Home from &#039;./pages/Home&#039;;
+
+/* 
+  App Component
+  The root container component of the Torque Talk application.
+  In Phase 1, it renders the Home page directly.
+  In Phase 2, this file will incorporate React Router to manage paths.
+*/
+function App() {
+  return (
+    &lt;Home /&gt;
+  );
+}
+
+export default App;
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>Line 12</strong>: Returns the <code>&lt;Home /&gt;</code> component directly. All other sub-components are nested inside the Home orchestrator.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">4. Mock Database Layer (src/data/cars.js)</span>
+        <span class="file-path">src/data/cars.js</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          An ES6 module exporting a raw array of Javascript objects. Each object represents a car containing its specifications (brand, price, body type, fuel, mileage, and real-life photos). This acts as our single source of truth.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>/* 
+  Mock database of cars for Torque Talk
+  Syllabus Concepts: JS Objects, Arrays, ES6 Modules (export) (Lectures 6-12).
+  Real-world Indian car specs with a mix of new/used status.
+  All photos are high-quality, real-life photos of the actual models.
+*/
+
+export const cars = [
+  {
+    id: 1,
+    name: &quot;Tata Nexon&quot;,
+    brand: &quot;Tata&quot;,
+    price: 810000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;17.4 kmpl&quot;,
+    transmission: &quot;Manual&quot;,
+    bodyType: &quot;SUV&quot;,
+    seating: 5,
+    rating: 4.6,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/2/25/Tata_Nexon_Blue_Dual_Tone.jpg&quot;
+  },
+  {
+    id: 2,
+    name: &quot;Maruti Swift&quot;,
+    brand: &quot;Maruti Suzuki&quot;,
+    price: 649000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;22.3 kmpl&quot;,
+    transmission: &quot;Manual&quot;,
+    bodyType: &quot;Hatchback&quot;,
+    seating: 5,
+    rating: 4.3,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/3/3d/Suzuki_Swift_%282024%29_hybrid_DSC_6076.jpg&quot;
+  },
+  {
+    id: 3,
+    name: &quot;Hyundai Creta&quot;,
+    brand: &quot;Hyundai&quot;,
+    price: 1100000,
+    fuel: &quot;Diesel&quot;,
+    mileage: &quot;18.0 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;SUV&quot;,
+    seating: 5,
+    rating: 4.7,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/2/25/2022_Hyundai_Creta_1.6_Plus_%28Chile%29_front_view.jpg&quot;
+  },
+  {
+    id: 4,
+    name: &quot;Mahindra Thar&quot;,
+    brand: &quot;Mahindra&quot;,
+    price: 1350000,
+    fuel: &quot;Diesel&quot;,
+    mileage: &quot;15.2 kmpl&quot;,
+    transmission: &quot;Manual&quot;,
+    bodyType: &quot;SUV&quot;,
+    seating: 4,
+    rating: 4.8,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/5/51/Mahindra_Thar_SUV_in_%22Red_Rage%22_color_at_Ashiana_Brahmanda%2C_East_Singbhum_India_%28Ank_Kumar%2C_Infosys_limited%29_02_%28cropped%29.jpg&quot;
+  },
+  {
+    id: 5,
+    name: &quot;Honda City&quot;,
+    brand: &quot;Honda&quot;,
+    price: 1180000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;17.8 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;Sedan&quot;,
+    seating: 5,
+    rating: 4.5,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/5/5c/2022_Honda_City_ZX_i-VTEC_%28India%29_front_view.jpg&quot;
+  },
+  {
+    id: 6,
+    name: &quot;Toyota Innova&quot;,
+    brand: &quot;Toyota&quot;,
+    price: 1990000,
+    fuel: &quot;Diesel&quot;,
+    mileage: &quot;13.6 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;MUV&quot;,
+    seating: 7,
+    rating: 4.8,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/3/36/Toyota_Innova_Zenix_2.0_V_%28III%29_%E2%80%93_f_22032025.jpg&quot;
+  },
+  {
+    id: 7,
+    name: &quot;Kia Seltos&quot;,
+    brand: &quot;Kia&quot;,
+    price: 1090000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;16.5 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;SUV&quot;,
+    seating: 5,
+    rating: 4.5,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/6/6c/Kia_Seltos_SP2_PE_Snow_White_Pearl_%2817%29_%28cropped%29.jpg&quot;
+  },
+  {
+    id: 8,
+    name: &quot;Tata Tiago EV&quot;,
+    brand: &quot;Tata&quot;,
+    price: 869000,
+    fuel: &quot;Electric&quot;,
+    mileage: &quot;315 km/charge&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;Hatchback&quot;,
+    seating: 5,
+    rating: 4.4,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/c/ca/2022_Tata_Tiago_XZA%2B_front_20230512.jpg&quot;
+  },
+  {
+    id: 9,
+    name: &quot;BMW 3 Series&quot;,
+    brand: &quot;BMW&quot;,
+    price: 7200000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;16.1 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;Sedan&quot;,
+    seating: 5,
+    rating: 4.9,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/9/91/BMW_G20_%282022%29_IMG_7316_%282%29.jpg&quot;
+  },
+  {
+    id: 10,
+    name: &quot;Maruti Alto K10&quot;,
+    brand: &quot;Maruti Suzuki&quot;,
+    price: 399000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;24.3 kmpl&quot;,
+    transmission: &quot;Manual&quot;,
+    bodyType: &quot;Hatchback&quot;,
+    seating: 5,
+    rating: 4.0,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/6/64/Suzuki_Alto_800_GL_2011.jpg&quot;
+  },
+  
+  /* Used Cars (Simulating resale catalog) */
+  {
+    id: 11,
+    name: &quot;Used Hyundai i20 (2021)&quot;,
+    brand: &quot;Hyundai&quot;,
+    price: 580000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;18.2 kmpl&quot;,
+    transmission: &quot;Manual&quot;,
+    bodyType: &quot;Hatchback&quot;,
+    seating: 5,
+    rating: 4.2,
+    isUsed: true,
+    odometer: &quot;32,000 km&quot;,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/e/ea/Hyundai_i20_%28III%2C_Facelift%29_%E2%80%93_f_11102025.jpg&quot;
+  },
+  {
+    id: 12,
+    name: &quot;Used Mahindra XUV500 (2019)&quot;,
+    brand: &quot;Mahindra&quot;,
+    price: 950000,
+    fuel: &quot;Diesel&quot;,
+    mileage: &quot;15.1 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;SUV&quot;,
+    seating: 7,
+    rating: 4.4,
+    isUsed: true,
+    odometer: &quot;64,000 km&quot;,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/d/d6/Mahindra_XUV_500_2014_%2813611614885%29.jpg&quot;
+  },
+  {
+    id: 13,
+    name: &quot;Used Maruti Baleno (2020)&quot;,
+    brand: &quot;Maruti Suzuki&quot;,
+    price: 490000,
+    fuel: &quot;CNG&quot;,
+    mileage: &quot;23.8 km/kg&quot;,
+    transmission: &quot;Manual&quot;,
+    bodyType: &quot;Hatchback&quot;,
+    seating: 5,
+    rating: 4.3,
+    isUsed: true,
+    odometer: &quot;48,500 km&quot;,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/5/57/2020_Suzuki_Baleno_GL_1.4_%28front%29.jpg&quot;
+  },
+  {
+    id: 14,
+    name: &quot;Used Audi A4 (2018)&quot;,
+    brand: &quot;Audi&quot;,
+    price: 2450000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;14.9 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;Sedan&quot;,
+    seating: 5,
+    rating: 4.6,
+    isUsed: true,
+    odometer: &quot;52,000 km&quot;,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/3/35/Audi_A4_B9_sedans_%28FL%29_1X7A2441.jpg&quot;
+  },
+  {
+    id: 15,
+    name: &quot;Used Toyota Fortuner (2020)&quot;,
+    brand: &quot;Toyota&quot;,
+    price: 2800000,
+    fuel: &quot;Diesel&quot;,
+    mileage: &quot;14.2 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;SUV&quot;,
+    seating: 7,
+    rating: 4.8,
+    isUsed: true,
+    odometer: &quot;41,000 km&quot;,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/6/66/2015_Toyota_Fortuner_%28New_Zealand%29.jpg&quot;
+  },
+  {
+    id: 16,
+    name: &quot;Used Mercedes C-Class (2019)&quot;,
+    brand: &quot;Mercedes-Benz&quot;,
+    price: 3300000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;12.6 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;Sedan&quot;,
+    seating: 5,
+    rating: 4.7,
+    isUsed: true,
+    odometer: &quot;29,000 km&quot;,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/b/be/Mercedes-Benz_W206_IMG_6380.jpg&quot;
+  },
+  {
+    id: 17,
+    name: &quot;BMW M4 Coupe&quot;,
+    brand: &quot;BMW&quot;,
+    price: 14200000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;10.4 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;Coupe&quot;,
+    seating: 4,
+    rating: 4.9,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/e/e2/2021_BMW_M4_Competition_Automatic_3.0_Front.jpg&quot;
+  },
+  {
+    id: 18,
+    name: &quot;Used Audi TT Coupe (2020)&quot;,
+    brand: &quot;Audi&quot;,
+    price: 4800000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;14.3 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;Coupe&quot;,
+    seating: 2,
+    rating: 4.7,
+    isUsed: true,
+    odometer: &quot;18,000 km&quot;,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/0/0a/2019_Audi_TT_Sport_40_TFSi_S-A_2.0_Front.jpg&quot;
+  },
+  {
+    id: 19,
+    name: &quot;Mercedes-Benz E-Class&quot;,
+    brand: &quot;Mercedes-Benz&quot;,
+    price: 7500000,
+    fuel: &quot;Diesel&quot;,
+    mileage: &quot;16.1 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;Sedan&quot;,
+    seating: 5,
+    rating: 4.8,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/f/fd/Mercedes-Benz_W214_1X7A1841.jpg&quot;
+  },
+  {
+    id: 20,
+    name: &quot;Audi Q7&quot;,
+    brand: &quot;Audi&quot;,
+    price: 8800000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;11.2 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;SUV&quot;,
+    seating: 7,
+    rating: 4.9,
+    isUsed: false,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/5/5f/Audi_Q7_4M_FL2_3.0_V6_MHEV_quattro_Satellite_Silver_Metallic_01_%28cropped%29.jpg&quot;
+  },
+  {
+    id: 21,
+    name: &quot;Used Mercedes-Benz GLA (2020)&quot;,
+    brand: &quot;Mercedes-Benz&quot;,
+    price: 2800000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;17.4 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;SUV&quot;,
+    seating: 5,
+    rating: 4.5,
+    isUsed: true,
+    odometer: &quot;32,000 km&quot;,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/0/0a/Mercedes-Benz_GLA_250_e_AMG_Line_%28H_247%29_%E2%80%93_f_11042021_%28exposure_adjusted%29.jpg&quot;
+  },
+  {
+    id: 22,
+    name: &quot;Used Audi A6 (2019)&quot;,
+    brand: &quot;Audi&quot;,
+    price: 3200000,
+    fuel: &quot;Petrol&quot;,
+    mileage: &quot;14.1 kmpl&quot;,
+    transmission: &quot;Automatic&quot;,
+    bodyType: &quot;Sedan&quot;,
+    seating: 5,
+    rating: 4.6,
+    isUsed: true,
+    odometer: &quot;45,000 km&quot;,
+    image: &quot;https://upload.wikimedia.org/wikipedia/commons/e/eb/Audi_A6_C9_IAA_2025_DSC_1920.jpg&quot;
+  }
+];
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>Objects structure</strong>: Each object has attributes representing actual Indian specifications. Used cars contain an extra <code>odometer</code> field and <code>isUsed: true</code>.</li>
+        <li><strong>Image URLs</strong>: High-resolution direct Wikimedia Commons URLs of actual physical models (e.g. Tata Nexon, Hyundai Creta, Mercedes E-Class) are used to give the catalog maximum accuracy.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">5. Custom Filter Hook (src/hooks/useCarFilter.js)</span>
+        <span class="file-path">src/hooks/useCarFilter.js</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          This is the logic center. It bundles search input states, tab selections (new/used), dropdown filters, and calculates the filtered list using memoization.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>import { useState, useMemo } from &#039;react&#039;;
+
+/* 
+  Custom React Hook: useCarFilter
+  Demonstrates:
+  1. Custom Hooks (Lec 41-42): Bundling stateful logic for reusability.
+  2. useMemo (Lec 36-40): Memoizing computed values to avoid unnecessary re-calculations on every render.
+  3. Array Methods: Chaining .filter() and .map() with string operations (.toLowerCase(), .includes()).
+*/
+export function useCarFilter(initialCars) {
+  // 1. Search Query state (text search input)
+  const [searchQuery, setSearchQuery] = useState(&#039;&#039;);
+
+  // 2. Active Tab state (&#039;new&#039; or &#039;used&#039;)
+  const [activeTab, setActiveTab] = useState(&#039;new&#039;);
+
+  // 3. Dropdown filters state
+  const [filters, setFilters] = useState({
+    brand: &#039;&#039;,
+    budget: &#039;&#039;,
+    bodyType: &#039;&#039;,
+    fuel: &#039;&#039;,
+    transmission: &#039;&#039;
+  });
+
+  // Handler to update a single key in the filters object
+  const handleFilterChange = (key, value) =&gt; {
+    setFilters((prev) =&gt; ({
+      ...prev,
+      [key]: value
+    }));
+  };
+
+  // Reset all search parameters and filters to default
+  const resetFilters = () =&gt; {
+    setSearchQuery(&#039;&#039;);
+    setFilters({
+      brand: &#039;&#039;,
+      budget: &#039;&#039;,
+      bodyType: &#039;&#039;,
+      fuel: &#039;&#039;,
+      transmission: &#039;&#039;
+    });
+  };
+
+  /* 
+    Memoized filtered cars array
+    Recalculates only when initialCars, searchQuery, activeTab, or filters change.
+  */
+  const filteredCars = useMemo(() =&gt; {
+    return initialCars.filter((car) =&gt; {
+      // A. Filter by Tab (New vs Used)
+      const matchesTab = activeTab === &#039;new&#039; ? !car.isUsed : car.isUsed;
+      if (!matchesTab) return false;
+
+      // B. Filter by Search Query (Name/Brand)
+      if (searchQuery.trim() !== &#039;&#039;) {
+        const query = searchQuery.toLowerCase();
+        const matchesName = car.name.toLowerCase().includes(query);
+        const matchesBrand = car.brand.toLowerCase().includes(query);
+        if (!matchesName &amp;&amp; !matchesBrand) return false;
+      }
+
+      // C. Filter by Brand Dropdown
+      if (filters.brand &amp;&amp; car.brand !== filters.brand) {
+        return false;
+      }
+
+      // D. Filter by Body Type Dropdown
+      if (filters.bodyType &amp;&amp; car.bodyType !== filters.bodyType) {
+        return false;
+      }
+
+      // E. Filter by Fuel Type
+      if (filters.fuel &amp;&amp; car.fuel !== filters.fuel) {
+        return false;
+      }
+
+      // F. Filter by Transmission
+      if (filters.transmission &amp;&amp; car.transmission !== filters.transmission) {
+        return false;
+      }
+
+      // G. Filter by Budget Range
+      if (filters.budget) {
+        if (filters.budget === &#039;500000&#039;) {
+          if (car.price &gt; 500000) return false;
+        } else if (filters.budget === &#039;1000000&#039;) {
+          if (car.price &lt;= 500000 || car.price &gt; 1000000) return false;
+        } else if (filters.budget === &#039;1500000&#039;) {
+          if (car.price &lt;= 1000000 || car.price &gt; 1500000) return false;
+        } else if (filters.budget === &#039;2000000&#039;) {
+          if (car.price &lt;= 1500000 || car.price &gt; 2000000) return false;
+        } else if (filters.budget === &#039;3000000&#039;) {
+          if (car.price &lt;= 2000000 || car.price &gt; 3000000) return false;
+        } else if (filters.budget === &#039;luxury&#039;) {
+          if (car.price &lt;= 3000000) return false;
+        }
+      }
+
+      return true; // Car matches all criteria
+    });
+  }, [initialCars, searchQuery, activeTab, filters]);
+
+  return {
+    searchQuery,
+    setSearchQuery,
+    activeTab,
+    setActiveTab,
+    filters,
+    handleFilterChange,
+    resetFilters,
+    filteredCars
+  };
+}
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>useCarFilter function</strong>: Receives the full cars array and returns all states and filters. This keeps the Home component code clean.</li>
+        <li><strong>useMemo (Line 50)</strong>: Caches the filtered array. The code inside <code>useMemo</code> will only re-execute if <code>initialCars</code>, <code>searchQuery</code>, <code>activeTab</code>, or <code>filters</code> change, preventing lag.</li>
+        <li><strong>Budget checks (Line 84)</strong>: Implements exact, non-overlapping price ranges to guarantee card counts match listing outputs.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">6. Page Orchestrator (src/pages/Home.jsx)</span>
+        <span class="file-path">src/pages/Home.jsx</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          The parent component that orchestrates all others. It coordinates layout sections, passes counts dynamically, triggers comparison arrays, and manages the detailed overlays.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>import React, { useState } from &#039;react&#039;;
+import Header from &#039;../components/Header&#039;;
+import Hero from &#039;../components/Hero&#039;;
+import BrandCard from &#039;../components/BrandCard&#039;;
+import BodyTypeCard from &#039;../components/BodyTypeCard&#039;;
+import BudgetCard from &#039;../components/BudgetCard&#039;;
+import CarGrid from &#039;../components/CarGrid&#039;;
+import CompareBar from &#039;../components/CompareBar&#039;;
+import SectionTitle from &#039;../components/SectionTitle&#039;;
+import Footer from &#039;../components/Footer&#039;;
+
+// Data imports
+import { cars } from &#039;../data/cars&#039;;
+import { brands } from &#039;../data/brands&#039;;
+import { bodyTypes } from &#039;../data/bodyTypes&#039;;
+import { budgets } from &#039;../data/budgets&#039;;
+
+// Hook and utility imports
+import { useCarFilter } from &#039;../hooks/useCarFilter&#039;;
+import { formatIndianPrice } from &#039;../components/CarCard&#039;;
+import &#039;./Home.css&#039;;
+
+/* 
+  Home Page Component
+  Demonstrates:
+  1. State Orchestrator Pattern: Assembles child modular components and controls parent-level states.
+  2. Lifting State Up: Coordinates comparison state and modal triggers shared between grids and cards.
+  3. Custom Hook integration: Imports `useCarFilter` to power the primary search system.
+  4. Conditional Modals: Renders detail sheet overlays using state triggers.
+  5. Smooth Viewport Scroll Anchoring: Interlaces navigation triggers and scrolls down to the grid.
+*/
+function Home() {
+  // 1. Invoke custom search/filter hook
+  const {
+    searchQuery,
+    setSearchQuery,
+    activeTab,
+    setActiveTab,
+    filters,
+    handleFilterChange,
+    resetFilters,
+    filteredCars
+  } = useCarFilter(cars);
+
+  // 2. Comparison states (Maximum 3 cars)
+  const [compareCars, setCompareCars] = useState([]);
+
+  // 3. Detail modal visibility states
+  const [selectedCarDetails, setSelectedCarDetails] = useState(null);
+
+  // Helper: Scroll viewport to listing grid
+  const scrollToCatalog = () =&gt; {
+    const element = document.getElementById(&#039;popular-cars&#039;);
+    if (element) {
+      element.scrollIntoView({ behavior: &#039;smooth&#039;, block: &#039;start&#039; });
+    }
+  };
+
+  // Callback: Handle search submissions from Hero panel
+  const handleSearchSubmit = () =&gt; {
+    scrollToCatalog();
+  };
+
+  // Callback: User selects a brand card
+  const handleBrandClick = (brandName) =&gt; {
+    // If we were on used tab, we can let user see brand matches on active tab
+    handleFilterChange(&#039;brand&#039;, brandName);
+    scrollToCatalog();
+  };
+
+  // Callback: User selects a body type category card
+  const handleBodyTypeClick = (bodyTypeName) =&gt; {
+    handleFilterChange(&#039;bodyType&#039;, bodyTypeName);
+    scrollToCatalog();
+  };
+
+  // Callback: User selects a budget range card
+  const handleBudgetClick = (budgetValue) =&gt; {
+    handleFilterChange(&#039;budget&#039;, budgetValue);
+    scrollToCatalog();
+  };
+
+  // Callback: Toggle adding / removing cars in compare array
+  const handleCompareToggle = (car) =&gt; {
+    const exists = compareCars.some((item) =&gt; item.id === car.id);
+    
+    if (exists) {
+      // Remove car if already added
+      setCompareCars(compareCars.filter((item) =&gt; item.id !== car.id));
+    } else {
+      // Limit comparison array to maximum 3 items
+      if (compareCars.length &gt;= 3) {
+        alert(&#039;You can compare a maximum of 3 cars at a time! Remove a car to add this one.&#039;);
+        return;
+      }
+      setCompareCars([...compareCars, car]);
+    }
+  };
+
+  // Callback: Remove a car chip from comparison bar
+  const handleCompareRemove = (car) =&gt; {
+    setCompareCars(compareCars.filter((item) =&gt; item.id !== car.id));
+  };
+
+  // Callback: Clear all selected cars
+  const handleClearAllCompare = () =&gt; {
+    setCompareCars([]);
+  };
+
+  // Callback: Open detailed specifications overlay modal
+  const handleViewDetails = (car) =&gt; {
+    setSelectedCarDetails(car);
+  };
+
+  // Callback: Close detailed specifications overlay modal
+  const handleCloseDetails = () =&gt; {
+    setSelectedCarDetails(null);
+  };
+
+  const isCarCompared = (carId) =&gt; compareCars.some((item) =&gt; item.id === carId);
+
+  const getBudgetCount = (value) =&gt; {
+    const isUsedTab = activeTab === &#039;used&#039;;
+    const matchesTab = (car) =&gt; car.isUsed === isUsedTab;
+    if (value === &#039;500000&#039;) {
+      return cars.filter(car =&gt; car.price &lt;= 500000 &amp;&amp; matchesTab(car)).length;
+    }
+    if (value === &#039;1000000&#039;) {
+      return cars.filter(car =&gt; car.price &gt; 500000 &amp;&amp; car.price &lt;= 1000000 &amp;&amp; matchesTab(car)).length;
+    }
+    if (value === &#039;1500000&#039;) {
+      return cars.filter(car =&gt; car.price &gt; 1000000 &amp;&amp; car.price &lt;= 1500000 &amp;&amp; matchesTab(car)).length;
+    }
+    if (value === &#039;2000000&#039;) {
+      return cars.filter(car =&gt; car.price &gt; 1500000 &amp;&amp; car.price &lt;= 2000000 &amp;&amp; matchesTab(car)).length;
+    }
+    if (value === &#039;3000000&#039;) {
+      return cars.filter(car =&gt; car.price &gt; 2000000 &amp;&amp; car.price &lt;= 3000000 &amp;&amp; matchesTab(car)).length;
+    }
+    if (value === &#039;luxury&#039;) {
+      return cars.filter(car =&gt; car.price &gt; 3000000 &amp;&amp; matchesTab(car)).length;
+    }
+    return 0;
+  };
+
+  return (
+    &lt;div style={{ display: &#039;flex&#039;, flexDirection: &#039;column&#039;, minHeight: &#039;100vh&#039; }}&gt;
+      {/* 1. Header (Sticky navigation) */}
+      &lt;Header /&gt;
+
+      {/* 2. Hero banner (gradient background + search card) */}
+      &lt;Hero
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        filters={filters}
+        handleFilterChange={handleFilterChange}
+        onSearchSubmit={handleSearchSubmit}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      /&gt;
+
+      &lt;main style={{ flexGrow: 1 }}&gt;
+        {/* 3. Popular Brands Section */}
+        &lt;section id=&quot;brands&quot; className=&quot;section-wrapper&quot;&gt;
+          &lt;div className=&quot;container&quot;&gt;
+            &lt;SectionTitle 
+              title=&quot;Popular Car Brands&quot; 
+              subtitle=&quot;Find cars by manufacturers&quot; 
+            /&gt;
+            &lt;div className=&quot;brands-grid&quot;&gt;
+              {brands.map((brand) =&gt; (
+                &lt;BrandCard
+                  key={brand.id}
+                  brand={brand}
+                  onClick={handleBrandClick}
+                /&gt;
+              ))}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        {/* 4. Explore by Body Type Section */}
+        &lt;section id=&quot;body-types&quot; className=&quot;section-wrapper&quot;&gt;
+          &lt;div className=&quot;container&quot;&gt;
+            &lt;SectionTitle 
+              title=&quot;Explore by Body Type&quot; 
+              subtitle=&quot;Select styling categories&quot; 
+            /&gt;
+            &lt;div className=&quot;bodytypes-grid&quot;&gt;
+              {bodyTypes.map((type) =&gt; {
+                const isUsedTab = activeTab === &#039;used&#039;;
+                const dynamicCount = cars.filter(car =&gt; 
+                  car.bodyType.toLowerCase() === type.name.toLowerCase() &amp;&amp; 
+                  car.isUsed === isUsedTab
+                ).length;
+                return (
+                  &lt;BodyTypeCard
+                    key={type.id}
+                    bodyType={type}
+                    dynamicCount={dynamicCount}
+                    onClick={handleBodyTypeClick}
+                  /&gt;
+                );
+              })}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        {/* 5. Budget Categories Section */}
+        &lt;section id=&quot;budgets&quot; className=&quot;section-wrapper&quot;&gt;
+          &lt;div className=&quot;container&quot;&gt;
+            &lt;SectionTitle 
+              title=&quot;Find Cars by Budget&quot; 
+              subtitle=&quot;Explore customized price guides&quot; 
+            /&gt;
+            &lt;div className=&quot;budgets-grid&quot;&gt;
+              {budgets.map((budget) =&gt; {
+                const dynamicCount = getBudgetCount(budget.value);
+                return (
+                  &lt;BudgetCard
+                    key={budget.id}
+                    budget={budget}
+                    dynamicCount={dynamicCount}
+                    onClick={handleBudgetClick}
+                  /&gt;
+                );
+              })}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        {/* 6. Popular Cars Catalog Grid (State-filtered list) */}
+        &lt;CarGrid
+          cars={filteredCars}
+          compareCars={compareCars}
+          onCompareToggle={handleCompareToggle}
+          onViewDetails={handleViewDetails}
+          onResetFilters={resetFilters}
+        /&gt;
+
+        {/* 7. Why choose Torque Talk section (Marketing details) */}
+        &lt;section id=&quot;why-us&quot; className=&quot;section-wrapper&quot;&gt;
+          &lt;div className=&quot;container&quot;&gt;
+            &lt;SectionTitle 
+              title=&quot;Why Choose Torque Talk?&quot; 
+              subtitle=&quot;India&#039;s leading auto research portal&quot; 
+            /&gt;
+            &lt;div className=&quot;why-us-grid&quot;&gt;
+              &lt;div className=&quot;why-us-card&quot;&gt;
+                &lt;div className=&quot;why-us-icon-wrapper&quot;&gt;⚖️&lt;/div&gt;
+                &lt;h3 className=&quot;why-us-title&quot;&gt;Detailed Comparisons&lt;/h3&gt;
+                &lt;p className=&quot;why-us-desc&quot;&gt;Compare up to 3 models side-by-side on prices, gearbox capacities, fuel mileage, and star ratings to discover your fit.&lt;/p&gt;
+              &lt;/div&gt;
+              &lt;div className=&quot;why-us-card&quot;&gt;
+                &lt;div className=&quot;why-us-icon-wrapper&quot;&gt;🔍&lt;/div&gt;
+                &lt;h3 className=&quot;why-us-title&quot;&gt;Smart Filter Match&lt;/h3&gt;
+                &lt;p className=&quot;why-us-desc&quot;&gt;Refine listings down to specific seating capacities, budgets, brands, or transmission styles instantly without delays.&lt;/p&gt;
+              &lt;/div&gt;
+              &lt;div className=&quot;why-us-card&quot;&gt;
+                &lt;div className=&quot;why-us-icon-wrapper&quot;&gt;🛡️&lt;/div&gt;
+                &lt;h3 className=&quot;why-us-title&quot;&gt;Certified Resale Listings&lt;/h3&gt;
+                &lt;p className=&quot;why-us-desc&quot;&gt;Explore used cars with pre-verified mileage counts and odometer specs for a transparent buying experience.&lt;/p&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      &lt;/main&gt;
+
+      {/* 8. Compare Tray Bar (appears sticky at bottom when compareCars &gt; 0) */}
+      &lt;CompareBar
+        compareCars={compareCars}
+        onRemove={handleCompareRemove}
+        onClearAll={handleClearAllCompare}
+      /&gt;
+
+      {/* 9. Footer (copyrights, link rows) */}
+      &lt;Footer /&gt;
+
+      {/* 10. Specifications Detail Modal overlay */}
+      {selectedCarDetails &amp;&amp; (
+        &lt;div className=&quot;details-modal-overlay&quot; onClick={handleCloseDetails}&gt;
+          &lt;div 
+            className=&quot;details-modal-box&quot; 
+            onClick={(e) =&gt; e.stopPropagation()}
+          &gt;
+            {/* Modal Header */}
+            &lt;div className=&quot;details-modal-header&quot;&gt;
+              &lt;h3&gt;Vehicle Specifications Sheet&lt;/h3&gt;
+              &lt;button 
+                type=&quot;button&quot; 
+                className=&quot;btn-details-close&quot; 
+                onClick={handleCloseDetails}
+              &gt;
+                &lt;svg width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; strokeWidth=&quot;2.5&quot;&gt;
+                  &lt;line x1=&quot;18&quot; y1=&quot;6&quot; x2=&quot;6&quot; y2=&quot;18&quot;&gt;&lt;/line&gt;
+                  &lt;line x1=&quot;6&quot; y1=&quot;6&quot; x2=&quot;18&quot; y2=&quot;18&quot;&gt;&lt;/line&gt;
+                &lt;/svg&gt;
+              &lt;/button&gt;
+            &lt;/div&gt;
+
+            {/* Modal Details Grid */}
+            &lt;div className=&quot;details-modal-body&quot;&gt;
+              &lt;img 
+                src={selectedCarDetails.image} 
+                alt={selectedCarDetails.name} 
+                className=&quot;details-modal-img&quot; 
+              /&gt;
+              &lt;div className=&quot;details-info-wrap&quot;&gt;
+                &lt;div className=&quot;details-meta-header&quot;&gt;
+                  &lt;span className=&quot;details-brand&quot;&gt;{selectedCarDetails.brand}&lt;/span&gt;
+                  &lt;h2 className=&quot;details-name&quot;&gt;{selectedCarDetails.name}&lt;/h2&gt;
+                  &lt;div className=&quot;details-price&quot;&gt;
+                    {formatIndianPrice(selectedCarDetails.price)}
+                  &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;table className=&quot;details-specs-table&quot;&gt;
+                  &lt;tbody&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Fuel Type&lt;/th&gt;
+                      &lt;td&gt;{selectedCarDetails.fuel}&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Gearbox&lt;/th&gt;
+                      &lt;td&gt;{selectedCarDetails.transmission}&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Body Style&lt;/th&gt;
+                      &lt;td&gt;{selectedCarDetails.bodyType}&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Mileage Rating&lt;/th&gt;
+                      &lt;td&gt;{selectedCarDetails.mileage}&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Seating&lt;/th&gt;
+                      &lt;td&gt;{selectedCarDetails.seating} Seater&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Safety Rating&lt;/th&gt;
+                      &lt;td&gt;⭐ {selectedCarDetails.rating} / 5.0&lt;/td&gt;
+                    &lt;/tr&gt;
+                    {selectedCarDetails.isUsed &amp;&amp; selectedCarDetails.odometer &amp;&amp; (
+                      &lt;tr&gt;
+                        &lt;th&gt;Odometer Count&lt;/th&gt;
+                        &lt;td&gt;{selectedCarDetails.odometer}&lt;/td&gt;
+                      &lt;/tr&gt;
+                    )}
+                  &lt;/tbody&gt;
+                &lt;/table&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            {/* Modal Actions */}
+            &lt;div className=&quot;details-modal-footer&quot;&gt;
+              &lt;button 
+                type=&quot;button&quot; 
+                className={`btn-details-compare ${isCarCompared(selectedCarDetails.id) ? &#039;active&#039; : &#039;&#039;}`}
+                onClick={() =&gt; {
+                  handleCompareToggle(selectedCarDetails);
+                }}
+              &gt;
+                {isCarCompared(selectedCarDetails.id) ? &#039;Added to Compare ✓&#039; : &#039;Add to Compare&#039;}
+              &lt;/button&gt;
+              &lt;button 
+                type=&quot;button&quot; 
+                className=&quot;btn-reset-filters&quot; 
+                style={{ backgroundColor: &#039;var(--dark-900)&#039; }} 
+                onClick={handleCloseDetails}
+              &gt;
+                Close Spec Sheet
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default Home;
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>useState hooks (Line 46 & 49)</strong>: Sets up local state arrays for compared cars and detail overlays.</li>
+        <li><strong>getBudgetCount (Line 122)</strong>: Aggregates list counts based on the active tab (new/used). It filters the mock database array in real-time, matching counts.</li>
+        <li><strong>scrollToCatalog (Line 52)</strong>: Uses the browser API <code>scrollIntoView</code> to provide smooth scrolling down to the grids upon clicking any category card.</li>
+        <li><strong>Lifting State Up (Line 191)</strong>: Renders <code>&lt;BodyTypeCard /&gt;</code> and <code>&lt;BudgetCard /&gt;</code>, supplying them with dynamic counts and bubble-up click handlers.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">7. Body Type Card (src/components/BodyTypeCard.jsx)</span>
+        <span class="file-path">src/components/BodyTypeCard.jsx</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          A modular UI card component representing car body types (SUV, Sedan, Hatchback, MUV, Coupe). It receives details as props and displays a dynamic count.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>import React from &#039;react&#039;;
+import &#039;./BodyTypeCard.css&#039;;
+
+/* 
+  BodyTypeCard Component
+  Demonstrates:
+  1. Prop usage: mapping individual `bodyType` details (name, iconName) and `dynamicCount`.
+  2. Loading real-life images dynamically from the public directory.
+  3. Interactive UI filter bubble navigation.
+*/
+function BodyTypeCard({ bodyType, dynamicCount, onClick }) {
+  const { name, iconName } = bodyType;
+
+  return (
+    &lt;div 
+      className=&quot;bodytype-card&quot; 
+      onClick={() =&gt; onClick(name)}
+      role=&quot;button&quot;
+      tabIndex={0}
+      onKeyDown={(e) =&gt; {
+        if (e.key === &#039;Enter&#039; || e.key === &#039; &#039;) {
+          onClick(name);
+        }
+      }}
+    &gt;
+      &lt;div className=&quot;bodytype-image-wrapper&quot;&gt;
+        &lt;img 
+          src={`/${iconName}_bodytype.png`} 
+          alt={`${name} Body Type`} 
+          className=&quot;bodytype-image&quot;
+        /&gt;
+      &lt;/div&gt;
+      &lt;div className=&quot;bodytype-name&quot;&gt;{name}&lt;/div&gt;
+      &lt;div className=&quot;bodytype-count&quot;&gt;
+        {dynamicCount} {dynamicCount === 1 ? &#039;Car&#039; : &#039;Cars&#039;} Available
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default BodyTypeCard;
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>Props (Line 11)</strong>: Destructures <code>bodyType</code>, <code>dynamicCount</code>, and the <code>onClick</code> handler.</li>
+        <li><strong>Click bubbling (Line 17)</strong>: Triggers <code>onClick(name)</code> upwards to let the home page filter the grid and scroll down.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">8. Budget Card (src/components/BudgetCard.jsx)</span>
+        <span class="file-path">src/components/BudgetCard.jsx</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          A modular card displaying price brackets (e.g. ₹5–10 Lakh). It shows availability counts matching the active tab.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>import React from &#039;react&#039;;
+import &#039;./BudgetCard.css&#039;;
+
+/* 
+  BudgetCard Component
+  Demonstrates:
+  1. Component props: mapping individual `budget` range options (label, value, count).
+  2. Sub-component design.
+  3. Interactive DOM callbacks.
+*/
+function BudgetCard({ budget, dynamicCount, onClick }) {
+  const { label, value } = budget;
+
+  return (
+    &lt;div 
+      className=&quot;budget-card&quot; 
+      onClick={() =&gt; onClick(value)}
+      role=&quot;button&quot;
+      tabIndex={0}
+      onKeyDown={(e) =&gt; {
+        if (e.key === &#039;Enter&#039; || e.key === &#039; &#039;) {
+          onClick(value);
+        }
+      }}
+    &gt;
+      &lt;div className=&quot;budget-info&quot;&gt;
+        &lt;span className=&quot;budget-label&quot;&gt;{label}&lt;/span&gt;
+        &lt;span className=&quot;budget-count&quot;&gt;
+          {dynamicCount} {dynamicCount === 1 ? &#039;Car&#039; : &#039;Cars&#039;}
+        &lt;/span&gt;
+      &lt;/div&gt;
+      
+      {/* Visual chevron indicator */}
+      &lt;div className=&quot;budget-chevron&quot;&gt;
+        &lt;svg width=&quot;16&quot; height=&quot;16&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; strokeWidth=&quot;3&quot;&gt;
+          &lt;polyline points=&quot;9 18 15 12 9 6&quot; /&gt;
+        &lt;/svg&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default BudgetCard;
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>Dynamic Display</strong>: Renders the name and count. Includes basic transitions on click.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">9. Car Card (src/components/CarCard.jsx)</span>
+        <span class="file-path">src/components/CarCard.jsx</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          The individual listing card displaying technical specs, price tag formatted in Indian Lakhs/Crores, comparisons checkboxes, and overlays trigger buttons.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>import React from &#039;react&#039;;
+import &#039;./CarCard.css&#039;;
+
+/* 
+  Helper Utility: Formats number price to Indian Lakhs/Crores display
+  Demonstrates: Basic ES6 function, conditional returns, arithmetic division, and toFixed decimal formatting.
+*/
+export const formatIndianPrice = (price) =&gt; {
+  if (price &gt;= 10000000) {
+    return `₹ ${(price / 10000000).toFixed(2)} Crore`;
+  }
+  return `₹ ${(price / 100000).toFixed(2)} Lakh`;
+};
+
+/* 
+  CarCard Component
+  Demonstrates:
+  1. Component Props: Receiving dynamic data (`car`, `isCompared`, callbacks).
+  2. Sub-component division: Modular reuse.
+  3. Conditional rendering: Showing odometer only for used cars, and changing button state depending on `isCompared`.
+  4. Javascript logic: Inline string interpolation and event triggers.
+*/
+function CarCard({ car, onCompareToggle, isCompared, onViewDetails }) {
+  const {
+    name,
+    brand,
+    price,
+    fuel,
+    mileage,
+    transmission,
+    bodyType,
+    seating,
+    rating,
+    isUsed,
+    odometer,
+    image
+  } = car;
+
+  return (
+    &lt;article className=&quot;car-card&quot;&gt;
+      {/* Visual Card Image Wrap */}
+      &lt;div className=&quot;car-card-img-wrapper&quot;&gt;
+        &lt;img src={image} alt={`${brand} ${name}`} className=&quot;car-card-img&quot; loading=&quot;lazy&quot; /&gt;
+        
+        {/* Conditional badge showing if car is New or Used */}
+        &lt;span className={`car-badge ${isUsed ? &#039;car-badge-used&#039; : &#039;car-badge-new&#039;}`}&gt;
+          {isUsed ? &#039;Certified Used&#039; : &#039;New&#039;}
+        &lt;/span&gt;
+        
+        {/* User rating score tag */}
+        &lt;div className=&quot;car-rating-badge&quot;&gt;
+          &lt;span className=&quot;rating-star&quot;&gt;★&lt;/span&gt;
+          &lt;span&gt;{rating}&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      {/* Details Area */}
+      &lt;div className=&quot;car-card-content&quot;&gt;
+        &lt;span className=&quot;car-brand-name&quot;&gt;{brand}&lt;/span&gt;
+        &lt;h3 className=&quot;car-model-name&quot;&gt;{name}&lt;/h3&gt;
+        
+        {/* Conditional odometer label if car is used */}
+        {isUsed &amp;&amp; odometer &amp;&amp; (
+          &lt;div className=&quot;car-odometer-label&quot;&gt;
+            &lt;svg width=&quot;12&quot; height=&quot;12&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; strokeWidth=&quot;2.5&quot;&gt;
+              &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; /&gt;
+              &lt;polyline points=&quot;12 6 12 12 16 14&quot; /&gt;
+            &lt;/svg&gt;
+            &lt;span&gt;{odometer} | Resale&lt;/span&gt;
+          &lt;/div&gt;
+        )}
+
+        &lt;div className=&quot;car-price&quot;&gt;{formatIndianPrice(price)}&lt;/div&gt;
+
+        {/* Small Specifications List grid */}
+        &lt;div className=&quot;car-specs-grid&quot;&gt;
+          &lt;div className=&quot;spec-item&quot;&gt;
+            &lt;span className=&quot;spec-value&quot;&gt;{fuel}&lt;/span&gt;
+            &lt;span className=&quot;spec-label&quot;&gt;Fuel&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div className=&quot;spec-item&quot;&gt;
+            &lt;span className=&quot;spec-value&quot;&gt;{transmission}&lt;/span&gt;
+            &lt;span className=&quot;spec-label&quot;&gt;Gearbox&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div className=&quot;spec-item&quot;&gt;
+            &lt;span className=&quot;spec-value&quot;&gt;{seating} Seater&lt;/span&gt;
+            &lt;span className=&quot;spec-label&quot;&gt;Capacity&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        {/* Action Button Controls */}
+        &lt;div className=&quot;car-card-actions&quot;&gt;
+          &lt;button 
+            type=&quot;button&quot; 
+            className=&quot;btn-card-details&quot; 
+            onClick={() =&gt; onViewDetails(car)}
+          &gt;
+            Details
+          &lt;/button&gt;
+          
+          &lt;button 
+            type=&quot;button&quot; 
+            className={`btn-card-compare ${isCompared ? &#039;active&#039; : &#039;&#039;}`}
+            onClick={() =&gt; onCompareToggle(car)}
+          &gt;
+            {isCompared ? &#039;Added ✓&#039; : &#039;+ Compare&#039;}
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/article&gt;
+  );
+}
+
+export default CarCard;
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>formatIndianPrice (Line 20)</strong>: Utility function formatting raw numbers (e.g. 1180000 -> 11.8 Lakh) for clean Indian currency styling.</li>
+        <li><strong>Specs display (Lines 44-55)</strong>: Renders icons and data lists (seating, fuel, transmission, mileage).</li>
+        <li><strong>Checkbox handler (Line 60)</strong>: Bubbles compare commands up to the central parent.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <div class="file-container">
+      <div class="file-header">
+        <span class="file-title">10. Comparison Drawer (src/components/CompareBar.jsx)</span>
+        <span class="file-path">src/components/CompareBar.jsx</span>
+      </div>
+      <div class="file-body">
+        <div class="file-description">
+          A slide-up bottom bar displaying selected models. It triggers a comprehensive modal layout showcasing technical metrics side-by-side.
+        </div>
+        <div class="code-wrapper">
+          <pre><code>import React, { useState } from &#039;react&#039;;
+import { formatIndianPrice } from &#039;./CarCard&#039;;
+import &#039;./CompareBar.css&#039;;
+
+/* 
+  CompareBar Component
+  Demonstrates:
+  1. Portals / Modal overlays: Render comparison table directly on the viewport.
+  2. Conditional Layouts: Toolbar slides up only when items are selected (`visible` class).
+  3. Spec Comparison Table: Rows mapping attributes (Brand, Fuel, Gearbox, Capacity, Rating).
+  4. React Hooks: useState to open/close the modal.
+*/
+function CompareBar({ compareCars, onRemove, onClearAll }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const hasItems = compareCars.length &gt; 0;
+
+  const handleOpenModal = () =&gt; {
+    if (compareCars.length &lt; 2) {
+      alert(&#039;Please add at least 2 cars to compare side-by-side!&#039;);
+      return;
+    }
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () =&gt; {
+    setIsModalOpen(false);
+  };
+
+  return (
+    &lt;&gt;
+      {/* Sticky Bottom Compare Bar Panel */}
+      &lt;div className={`compare-bar-wrapper ${hasItems ? &#039;visible&#039; : &#039;&#039;}`}&gt;
+        &lt;div className=&quot;compare-bar-container container&quot;&gt;
+          
+          {/* Metadata Title */}
+          &lt;div className=&quot;compare-title-area&quot;&gt;
+            &lt;h4&gt;Compare Selection&lt;/h4&gt;
+            &lt;p&gt;{compareCars.length} of 3 cars selected&lt;/p&gt;
+          &lt;/div&gt;
+
+          {/* List of active car chips */}
+          &lt;div className=&quot;compare-items-list&quot;&gt;
+            {compareCars.map((car) =&gt; (
+              &lt;div key={car.id} className=&quot;compare-item-chip&quot;&gt;
+                &lt;img src={car.image} alt={car.name} className=&quot;compare-chip-img&quot; /&gt;
+                &lt;div className=&quot;compare-chip-details&quot;&gt;
+                  &lt;span className=&quot;compare-chip-name&quot;&gt;{car.name}&lt;/span&gt;
+                  &lt;span className=&quot;compare-chip-price&quot;&gt;{formatIndianPrice(car.price)}&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;button 
+                  type=&quot;button&quot; 
+                  className=&quot;compare-chip-remove&quot; 
+                  onClick={() =&gt; onRemove(car)}
+                  title=&quot;Remove car&quot;
+                &gt;
+                  &lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; strokeWidth=&quot;2.5&quot;&gt;
+                    &lt;line x1=&quot;18&quot; y1=&quot;6&quot; x2=&quot;6&quot; y2=&quot;18&quot;&gt;&lt;/line&gt;
+                    &lt;line x1=&quot;6&quot; y1=&quot;6&quot; x2=&quot;18&quot; y2=&quot;18&quot;&gt;&lt;/line&gt;
+                  &lt;/svg&gt;
+                &lt;/button&gt;
+              &lt;/div&gt;
+            ))}
+            
+            {/* Display empty slots */}
+            {Array.from({ length: Math.max(0, 3 - compareCars.length) }).map((_, idx) =&gt; (
+              &lt;div 
+                key={`empty-${idx}`} 
+                className=&quot;compare-item-chip&quot; 
+                style={{ opacity: 0.5, borderStyle: &#039;dashed&#039;, backgroundColor: &#039;transparent&#039; }}
+              &gt;
+                &lt;div className=&quot;compare-chip-details&quot; style={{ margin: &#039;auto&#039; }}&gt;
+                  &lt;span className=&quot;compare-chip-name&quot; style={{ color: &#039;var(--dark-400)&#039;, fontWeight: 500 }}&gt;
+                    + Select Car
+                  &lt;/span&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            ))}
+          &lt;/div&gt;
+
+          {/* Control Action Buttons */}
+          &lt;div className=&quot;compare-bar-actions&quot;&gt;
+            &lt;button 
+              type=&quot;button&quot; 
+              className=&quot;btn-compare-now&quot; 
+              onClick={handleOpenModal}
+            &gt;
+              Compare Now
+            &lt;/button&gt;
+            &lt;button 
+              type=&quot;button&quot; 
+              className=&quot;btn-compare-clear&quot; 
+              onClick={onClearAll}
+            &gt;
+              Clear All
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      {/* Comparison Modal Overlay */}
+      {isModalOpen &amp;&amp; (
+        &lt;div className=&quot;compare-modal-overlay&quot; onClick={handleCloseModal}&gt;
+          &lt;div 
+            className=&quot;compare-modal-box&quot; 
+            onClick={(e) =&gt; e.stopPropagation()} /* Prevents click-away triggering close */
+          &gt;
+            {/* Modal Title bar */}
+            &lt;div className=&quot;compare-modal-header&quot;&gt;
+              &lt;h3&gt;Car Comparison Sheet&lt;/h3&gt;
+              &lt;button 
+                type=&quot;button&quot; 
+                className=&quot;btn-modal-close&quot; 
+                onClick={handleCloseModal}
+              &gt;
+                &lt;svg width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; strokeWidth=&quot;2.5&quot;&gt;
+                  &lt;line x1=&quot;18&quot; y1=&quot;6&quot; x2=&quot;6&quot; y2=&quot;18&quot;&gt;&lt;/line&gt;
+                  &lt;line x1=&quot;6&quot; y1=&quot;6&quot; x2=&quot;18&quot; y2=&quot;18&quot;&gt;&lt;/line&gt;
+                &lt;/svg&gt;
+              &lt;/button&gt;
+            &lt;/div&gt;
+
+            {/* Spec Comparison Table wrapper */}
+            &lt;div className=&quot;compare-table-wrapper&quot;&gt;
+              &lt;table className=&quot;compare-table&quot;&gt;
+                &lt;thead&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;Specification&lt;/th&gt;
+                    {compareCars.map((car) =&gt; (
+                      &lt;td key={car.id}&gt;
+                        &lt;div className=&quot;compare-table-car-header&quot;&gt;
+                          &lt;img src={car.image} alt={car.name} className=&quot;compare-table-car-img&quot; /&gt;
+                          &lt;div className=&quot;compare-table-car-name&quot;&gt;{car.name}&lt;/div&gt;
+                          &lt;div className=&quot;compare-table-car-price&quot;&gt;{formatIndianPrice(car.price)}&lt;/div&gt;
+                          &lt;button 
+                            type=&quot;button&quot; 
+                            className=&quot;compare-table-remove-btn&quot; 
+                            onClick={() =&gt; {
+                              onRemove(car);
+                              // Close modal if comparison list shrinks below 2
+                              if (compareCars.length &lt;= 2) {
+                                handleCloseModal();
+                              }
+                            }}
+                          &gt;
+                            Remove
+                          &lt;/button&gt;
+                        &lt;/div&gt;
+                      &lt;/td&gt;
+                    ))}
+                  &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;Brand&lt;/th&gt;
+                    {compareCars.map(car =&gt; &lt;td key={car.id}&gt;{car.brand}&lt;/td&gt;)}
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;Fuel Type&lt;/th&gt;
+                    {compareCars.map(car =&gt; &lt;td key={car.id}&gt;{car.fuel}&lt;/td&gt;)}
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;Gearbox&lt;/th&gt;
+                    {compareCars.map(car =&gt; &lt;td key={car.id}&gt;{car.transmission}&lt;/td&gt;)}
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;Mileage&lt;/th&gt;
+                    {compareCars.map(car =&gt; &lt;td key={car.id}&gt;{car.mileage}&lt;/td&gt;)}
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;Capacities&lt;/th&gt;
+                    {compareCars.map(car =&gt; &lt;td key={car.id}&gt;{car.seating} Seater&lt;/td&gt;)}
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;Body Type&lt;/th&gt;
+                    {compareCars.map(car =&gt; &lt;td key={car.id}&gt;{car.bodyType}&lt;/td&gt;)}
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;th&gt;Rating&lt;/th&gt;
+                    {compareCars.map(car =&gt; (
+                      &lt;td key={car.id} style={{ fontWeight: 600 }}&gt;
+                        &lt;span style={{ color: &#039;var(--warning)&#039; }}&gt;★&lt;/span&gt; {car.rating} / 5.0
+                      &lt;/td&gt;
+                    ))}
+                  &lt;/tr&gt;
+                &lt;/tbody&gt;
+              &lt;/table&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/&gt;
+  );
+}
+
+export default CompareBar;
+</code></pre>
+        </div>
+        <div class="explanation-title">How it works:</div>
+        <div class="explanation-list">
+          
+      <ul>
+        <li><strong>compareCars Prop</strong>: Receives up to 3 cars selected for comparison.</li>
+        <li><strong>Modal Layout</strong>: Renders a structured grid comparing pricing, body type, fuel, mileage, transmission, and seating of the selected models.</li>
+      </ul>
+    
+        </div>
+      </div>
+    </div>
+  
+    <h2 class="section-title">III. Print Instructions</h2>
+    <div class="flow-card" style="margin-bottom: 60px;">
+      <h3>How to convert this file into a beautiful PDF:</h3>
+      <ol style="padding-left: 20px; margin-top: 10px;">
+        <li style="margin-bottom: 8px;">Open this file (<code>project_documentation.html</code>) in Google Chrome or any modern browser.</li>
+        <li style="margin-bottom: 8px;">Press <strong>Ctrl + P</strong> (Windows) or <strong>Cmd + P</strong> (Mac) to open the print dialog.</li>
+        <li style="margin-bottom: 8px;">Set the Destination to <strong>Save as PDF</strong>.</li>
+        <li style="margin-bottom: 8px;">Under "More settings", ensure <strong>Background graphics</strong> is checked so that code blocks and styled colors print correctly, and set the Margins to <strong>Default</strong>.</li>
+        <li style="margin-bottom: 8px;">Click <strong>Save</strong> to generate your premium PDF document!</li>
+      </ol>
+    </div>
+  </div>
+</body>
+</html>

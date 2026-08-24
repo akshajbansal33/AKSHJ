@@ -1,0 +1,321 @@
+/* 
+  CompareBar and Compare Modal Stylesheet
+  Demonstrates: Fixed positioning, high z-index overlay, flexbox, glassmorphism, grid tables, and transitions.
+*/
+
+.compare-bar-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--compare-bar-bg);
+  backdrop-filter: blur(12px);
+  border-top: 2px solid var(--primary-border);
+  box-shadow: 0 -10px 25px rgba(15, 23, 42, 0.15);
+  padding: var(--space-md) 0;
+  z-index: 999;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.compare-bar-wrapper.visible {
+  transform: translateY(0);
+}
+
+.compare-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.compare-title-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.compare-title-area h4 {
+  font-size: 1.1rem;
+  color: var(--dark-900);
+}
+
+.compare-title-area p {
+  font-size: 0.8rem;
+  color: var(--dark-600);
+}
+
+/* Compare List Items */
+.compare-items-list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-grow: 1;
+  max-width: 600px;
+}
+
+.compare-item-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background-color: var(--light-100);
+  border: 1px solid var(--light-200);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  position: relative;
+  animation: popIn 0.3s ease-out;
+  flex: 1;
+  min-width: 140px;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.compare-chip-img {
+  width: 40px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.compare-chip-details {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.compare-chip-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--dark-800);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compare-chip-price {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.compare-chip-remove {
+  background: none;
+  border: none;
+  color: var(--dark-400);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+
+.compare-chip-remove:hover {
+  color: var(--primary);
+  background-color: var(--primary-light);
+}
+
+/* Compare Actions */
+.compare-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.btn-compare-now {
+  background-color: var(--primary);
+  color: var(--white);
+  font-weight: 700;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
+.btn-compare-now:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-compare-clear {
+  color: var(--dark-600);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.btn-compare-clear:hover {
+  color: var(--primary);
+}
+
+/* 
+  Comparison Modal Overlay
+*/
+.compare-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.compare-modal-box {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  animation: modalSlideUp 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes modalSlideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.compare-modal-header {
+  padding: var(--space-lg);
+  border-bottom: 1.5px solid var(--light-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.compare-modal-header h3 {
+  font-size: 1.5rem;
+}
+
+.btn-modal-close {
+  color: var(--dark-600);
+  padding: var(--space-xs);
+  border-radius: var(--radius-full);
+}
+
+.btn-modal-close:hover {
+  background-color: var(--light-100);
+  color: var(--primary);
+}
+
+/* Modal Content Table styling */
+.compare-table-wrapper {
+  padding: var(--space-lg);
+  overflow-x: auto;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--light-200);
+  vertical-align: middle;
+}
+
+.compare-table th {
+  font-family: var(--font-heading);
+  color: var(--dark-900);
+  font-weight: 700;
+  width: 25%;
+}
+
+.compare-table td {
+  font-size: 0.95rem;
+  color: var(--dark-800);
+}
+
+.compare-table-car-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-xs);
+}
+
+.compare-table-car-img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--light-300);
+}
+
+.compare-table-car-name {
+  font-weight: 700;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--dark-900);
+  margin-top: var(--space-xs);
+}
+
+.compare-table-car-price {
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.compare-table-remove-btn {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.compare-table-remove-btn:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .compare-bar-container {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  
+  .compare-items-list {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .compare-bar-actions {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .compare-table th {
+    font-size: 0.8rem;
+  }
+  
+  .compare-table td {
+    font-size: 0.85rem;
+    padding: var(--space-sm);
+  }
+}

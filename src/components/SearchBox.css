@@ -1,0 +1,301 @@
+.search-box-card {
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-lg);
+  width: 100%;
+  max-width: 440px;
+  margin: 0;
+  position: relative;
+  z-index: 10;
+  border: 1px solid var(--light-200);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme='dark'] .search-box-card {
+  border-color: var(--light-300);
+}
+
+.search-box-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--dark-900);
+  margin-bottom: var(--space-md);
+  font-family: var(--font-heading);
+}
+
+/* Tabs Header */
+.search-tabs {
+  display: flex;
+  gap: 2px;
+  background-color: var(--light-100);
+  border: 1px solid var(--light-200);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  margin-bottom: var(--space-md);
+}
+
+[data-theme='dark'] .search-tabs {
+  border-color: var(--light-300);
+}
+
+.search-tab-btn {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--dark-600);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  transition: all var(--transition-fast);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.search-tab-btn:hover {
+  color: var(--primary);
+}
+
+.search-tab-btn.active {
+  color: var(--white);
+  background-color: var(--dark-800);
+}
+
+[data-theme='dark'] .search-tab-btn.active {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+/* Radio Button Selectors */
+.search-mode-radios {
+  display: flex;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-md);
+  padding-left: 2px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--dark-800);
+  position: relative;
+  user-select: none;
+}
+
+.radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.custom-radio {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--dark-400);
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  transition: all var(--transition-fast);
+  background-color: var(--white);
+}
+
+[data-theme='dark'] .custom-radio {
+  border-color: var(--dark-400);
+}
+
+.radio-label:hover .custom-radio {
+  border-color: var(--primary);
+}
+
+.radio-input:checked ~ .custom-radio {
+  border-color: var(--primary);
+  background-color: var(--white);
+}
+
+.radio-input:checked ~ .custom-radio::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--primary);
+}
+
+.radio-input:checked ~ .radio-text {
+  color: var(--primary);
+}
+
+/* Form Inputs Layout */
+.search-form-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--dark-400);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.form-select {
+  width: 100%;
+  height: 46px;
+  padding: 0 32px 0 16px;
+  border: 1px solid var(--light-300);
+  border-radius: var(--radius-md);
+  background-color: var(--light-100);
+  color: var(--dark-800);
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: var(--transition-fast);
+  appearance: none;
+  cursor: pointer;
+}
+
+[data-theme='dark'] .form-select {
+  border-color: var(--light-300);
+}
+
+.form-input-wrapper-select::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--dark-600);
+  border-bottom: 2px solid var(--dark-600);
+  transform: translateY(-3px) rotate(45deg);
+  pointer-events: none;
+}
+
+[data-theme='dark'] .form-input-wrapper-select::after {
+  border-right-color: var(--dark-600);
+  border-bottom-color: var(--dark-600);
+}
+
+.form-select:focus {
+  border-color: var(--primary);
+  background-color: var(--white);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* Submit Button - Large & Premium */
+.search-submit-btn-large {
+  width: 100%;
+  height: 48px;
+  background-color: var(--primary);
+  color: #ffffff;
+  font-size: 1.02rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+  margin-bottom: var(--space-md);
+  cursor: pointer;
+}
+
+.search-submit-btn-large:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Name Search Section (compact) */
+.name-search-group {
+  margin-top: var(--space-md);
+  border-top: 1px solid var(--light-200);
+  padding-top: var(--space-md);
+}
+
+[data-theme='dark'] .name-search-group {
+  border-top-color: var(--light-200);
+}
+
+.form-input-compact {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px 0 32px;
+  border: 1px solid var(--light-300);
+  border-radius: var(--radius-md);
+  background-color: var(--light-100);
+  color: var(--dark-800);
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+[data-theme='dark'] .form-input-compact {
+  border-color: var(--light-300);
+}
+
+.form-input-compact:focus {
+  border-color: var(--primary);
+  background-color: var(--white);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* Quick Search Tags */
+.quick-tags-compact {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.quick-tag {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--dark-600);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.quick-tag:hover {
+  color: var(--primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .search-box-card {
+    padding: var(--space-md);
+  }
+  
+  .search-tab-btn {
+    padding: 6px 8px;
+    font-size: 0.82rem;
+  }
+  
+  .search-mode-radios {
+    gap: var(--space-md);
+  }
+}

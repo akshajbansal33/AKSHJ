@@ -1,0 +1,80 @@
+/* 
+  CarGrid Component Stylesheet
+  Demonstrates: CSS Grid layout with auto-fit/auto-fill columns, spacing, flex status bars, and empty states.
+*/
+
+.cargrid-section {
+  padding: var(--space-2xl) 0;
+  background-color: var(--light-100);
+}
+
+.cargrid-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+  border-bottom: 1.5px solid var(--light-200);
+  padding-bottom: var(--space-sm);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.cargrid-count {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--dark-600);
+}
+
+/* Responsive grid: columns adjust automatically based on viewport size */
+.cargrid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-xl);
+}
+
+/* Empty State Styles */
+.cargrid-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl) var(--space-md);
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1.5px dashed var(--light-300);
+  text-align: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.cargrid-empty-icon {
+  color: var(--primary-hover);
+  background-color: var(--primary-light);
+  padding: var(--space-md);
+  border-radius: var(--radius-full);
+  display: inline-flex;
+}
+
+.cargrid-empty h3 {
+  font-size: 1.5rem;
+  color: var(--dark-900);
+}
+
+.cargrid-empty p {
+  color: var(--dark-600);
+  max-width: 400px;
+}
+
+.btn-reset-filters {
+  background-color: var(--primary);
+  color: var(--white);
+  font-weight: 600;
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-reset-filters:hover {
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+}

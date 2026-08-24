@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torque Talk Project Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-bg: #0f172a;
+      --secondary-bg: #1e293b;
+      --accent-color: #3b82f6;
+      --accent-success: #10b981;
+      --accent-danger: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: var(--text-main);
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .print-btn-container {
+      width: 100%;
+      max-width: 960px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--secondary-bg);
+      padding: 15px 25px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .print-btn-container p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .btn-print {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background-color 0.2s;
+    }
+
+    .btn-print:hover {
+      background-color: #2563eb;
+    }
+
+    /* Slides structure */
+    .slide-wrapper {
+      width: 100%;
+      max-width: 960px;
+      margin-bottom: 40px;
+      page-break-inside: avoid;
+    }
+
+    .slide {
+      background-color: var(--primary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px 12px 0 0;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    .slide-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .slide-subtitle {
+      font-size: 0.85rem;
+      font-family: 'Fira Code', monospace;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* Slide Content */
+    .slide-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 15px;
+    }
+
+    /* Speaker Notes */
+    .speaker-notes {
+      background-color: #162032;
+      border: 1px solid var(--border-color);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      padding: 25px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .speaker-notes-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent-color);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Two Column Layout */
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Text Formatting */
+    h2, h3 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+
+    li {
+      margin-bottom: 8px;
+      position: relative;
+      padding-left: 20px;
+      font-size: 1.05rem;
+      color: #cbd5e1;
+    }
+
+    li::before {
+      content: "•";
+      color: var(--accent-color);
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      font-size: 1.2rem;
+    }
+
+    .danger-list li::before {
+      color: var(--accent-danger);
+    }
+
+    .success-list li::before {
+      color: var(--accent-success);
+    }
+
+    .highlight-text {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    /* Title Slide Specifics */
+    .slide-title-page {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+      gap: 20px;
+    }
+
+    .title-banner {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+      letter-spacing: -1px;
+    }
+
+    .title-desc {
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 30px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 25px;
+      width: 100%;
+    }
+
+    .meta-item {
+      text-align: center;
+    }
+
+    .meta-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .meta-value {
+      font-size: 1.1rem;
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-main);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* Cards layouts */
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card-item {
+      background-color: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--accent-color);
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Diagram flow styles */
+    .diagram-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .diagram-step {
+      background-color: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      width: 28%;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .diagram-step h4 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-main);
+      margin-bottom: 5px;
+    }
+
+    .diagram-step p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .diagram-arrow {
+      font-size: 2rem;
+      color: var(--accent-color);
+      font-weight: bold;
+    }
+
+    /* print adjustments */
+    @media print {
+      body {
+        background-color: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .print-btn-container {
+        display: none !important;
+      }
+
+      .slide-wrapper {
+        margin-bottom: 0 !important;
+        page-break-after: always !important;
+      }
+
+      .slide {
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        aspect-ratio: 16 / 9 !important;
+        background-color: #0f172a !important;
+        color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+      }
+
+      .speaker-notes {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Print Button Navigation -->
+  <div class="print-btn-container">
+    <div>
+      <h3>Torque Talk Project Presentation Slide Deck</h3>
+      <p>Click "Export Slides to PDF" to generate your presentation slides. Keep background graphics enabled in the print dialogue.</p>
+    </div>
+    <button class="btn-print" onclick="window.print()">Export Slides to PDF</button>
+  </div>
+
+  <!-- SLIDE 1: Title Slide -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-subtitle">Project Showcase</span>
+        <span class="slide-subtitle">Slide 01/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="slide-title-page">
+          <h1 class="title-banner">TORQUE TALK</h1>
+          <p class="title-desc">India's Premium Automotive Discovery & Comparison Platform</p>
+          
+          <div class="meta-grid">
+            <div class="meta-item">
+              <div class="meta-label">Course</div>
+              <div class="meta-value">Front End Engineering-II</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Framework</div>
+              <div class="meta-value">React 19 (Vite)</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">State Pattern</div>
+              <div class="meta-value">Orchestrator & Custom Hooks</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>© 2026 Torque Talk. All rights reserved.</span>
+        <span>Syllabus Compliance Project</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>Good morning/afternoon, teachers. Today, I am excited to present 'Torque Talk', a professional-grade car research and comparison platform. This project serves as a comprehensive demonstration of advanced Front End Engineering-II concepts, utilizing React 19, Vite, and ES6+ modules. The platform is designed to provide users with a mobile-first, highly responsive dashboard to search, filter, and compare new and certified used cars in the Indian market.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Problem Statement -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">Project Overview</span>
+        <span class="slide-subtitle">Slide 02/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="cols-2">
+          <div class="col">
+            <h3 style="color: var(--accent-danger); margin-bottom: 10px;">The Problem</h3>
+            <ul class="danger-list">
+              <li>Fragmented vehicle specifications across different websites.</li>
+              <li>Confusing pricing metrics and overlapping filter ranges.</li>
+              <li>No simple mechanism to contrast models side-by-side on viewport.</li>
+              <li>Inconsistent layouts that fail on mobile devices.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3 style="color: var(--accent-success); margin-bottom: 10px;">The Torque Talk Solution</h3>
+            <ul class="success-list">
+              <li><strong>Single Source of Truth:</strong> Clean mock database structure.</li>
+              <li><strong>Responsive Design:</strong> Dark-themed modern layout grids.</li>
+              <li><strong>Seamless Navigation:</strong> Interactive category exploration.</li>
+              <li><strong>Comparison Engine:</strong> Bottom sticky drawer for rapid contrast.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Torque Talk Discovery Dashboard</span>
+        <span>Slide 02</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>When looking for a car, buyers face fragmented specifications, confusing budgets, and no easy way to contrast specifications. Torque Talk solves this by offering an intuitive 'Discovery Dashboard'. The user experience is prioritized, featuring curated dark-themes, responsive layout grids, and a side-by-side comparison engine that allows buyers to evaluate vehicles on-the-fly.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Key Features -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">Core User Features</span>
+        <span class="slide-subtitle">Slide 03/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2x2">
+          <div class="card-item">
+            <div class="card-title">1. Multi-Dimensional Search</div>
+            <p class="card-desc">Instant text query matches across model names and brands, dynamically filtering the catalog without page refreshes.</p>
+          </div>
+          <div class="card-item">
+            <div class="card-title">2. Smart Filtering Cards</div>
+            <p class="card-desc">Interactive body style cards and non-overlapping budget ranges displaying exact available counts calculated in real-time.</p>
+          </div>
+          <div class="card-item">
+            <div class="card-title">3. Bottom Compare Toolbar</div>
+            <p class="card-desc">Sticky comparison bar drawer rising from viewport bottom to hold up to 3 selected vehicles for side-by-side comparison.</p>
+          </div>
+          <div class="card-item">
+            <div class="card-title">4. Specifications Sheet Overlay</div>
+            <p class="card-desc">Overlaid light-box sheet displaying detailed car ratings, fuel type, gearbox, seating count, safety scores, and odometer details.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Feature Overview</span>
+        <span>Slide 03</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>Torque Talk has four main feature sets. First, a live search query bar that filters results as you type. Second, category cards that dynamically calculate and display how many cars are available in the database matching that criteria. Third, a comparison drawer that slides up from the bottom of the screen. Fourth, a modal spec sheet that overlays the screen to show details like safety stars and mileage without forcing the user to load a new page.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Architecture -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">System Architecture</span>
+        <span class="slide-subtitle">Slide 04/11</span>
+      </div>
+      <div class="slide-content">
+        <p style="margin-bottom: 15px; color: var(--text-muted);">The project is designed using modular React components under a parent state controller page:</p>
+        <div style="background-color: var(--secondary-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 25px; font-family: 'Fira Code', monospace; font-size: 0.9rem; line-height: 1.5;">
+          <span style="color: var(--accent-color);">App.jsx</span> (Root Bootstrapper)<br/>
+          └── <span style="color: var(--accent-success);">Home.jsx</span> (Page orchestrator holding comparison, details modal & scroll locks)<br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span style="color: var(--text-main);">Header.jsx</span> (Sticky branding header & Theme Toggle switch)<br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span style="color: var(--text-main);">Hero.jsx</span> (Visual Search panel carrying SearchBox component)<br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span style="color: var(--text-main);">BrandCard / BodyTypeCard / BudgetCard</span> (Interactive navigation)<br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span style="color: var(--text-main);">CarGrid.jsx</span> (Filters rendering lists utilizing CarCards)<br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;└── <span style="color: var(--text-main);">CompareBar.jsx</span> (Sticky bottom contrast tray bar drawer)<br/>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Component Hierarchy</span>
+        <span>Slide 04</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>To ensure clean, maintainable code, the application is divided into modular components following React's component hierarchy. The 'App' mounts the main 'Home' component, which acts as the State Orchestrator. Home manages the shared states and coordinates components like the Header, the Hero, the interactive cards, the catalog grid, and the bottom compare drawer. This modularity prevents codebase pollution and makes the app viva-ready.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: State Management -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">State Management: Lifting State Up</span>
+        <span class="slide-subtitle">Slide 05/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="cols-2">
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">The State Orchestrator Pattern</h3>
+            <ul>
+              <li>Parent component (`Home.jsx`) coordinates state values and shared data arrays.</li>
+              <li>Data is sent down to sub-components via read-only **Props**.</li>
+              <li>Interactions (clicks) bubble back up to the parent using **Callbacks**.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">Coordinated States</h3>
+            <ul>
+              <li><strong>Active Tab:</strong> ('new' vs 'used') toggling recalculates card inventory counts in real-time.</li>
+              <li><strong>Compare Array:</strong> Stores comparison items globally.</li>
+              <li><strong>Modal Select:</strong> Coordinates display values for overlay spec sheets.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>React Hooks & Data Flow</span>
+        <span>Slide 05</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>A core concept of React we implemented is 'Lifting State Up'. Instead of each component keeping its own isolated state, the state is lifted to 'Home.jsx'. For instance, when a user clicks 'Add to Compare' on a 'CarCard', that click event bubbles up to the 'Home' parent. The parent updates the comparison array, which then automatically flows down to update the bottom 'CompareBar' and check/uncheck the comparison checkboxes across all cards.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Custom Hooks -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">Logic Hook: useCarFilter</span>
+        <span class="slide-subtitle">Slide 06/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="cols-2">
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">Hook Responsibility</h3>
+            <ul>
+              <li>Separates calculations and filter business logic from visual HTML components.</li>
+              <li>Powers the search engine using React's state hooks.</li>
+              <li>Maintains search query strings, tab states, dropdown filters, and search modes.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">Sequential Filtering Flow</h3>
+            <div class="diagram-flow" style="display: flex; flex-direction: column; gap: 8px; align-items: flex-start;">
+              <span style="font-size: 0.95rem;">1. Match Tab Type (New vs Used)</span>
+              <span style="font-size: 0.95rem;">2. Evaluate Search input string</span>
+              <span style="font-size: 0.95rem;">3. Match Brand & Body Style Dropdowns</span>
+              <span style="font-size: 0.95rem;">4. Evaluate non-overlapping Budget limits</span>
+              <span style="font-size: 0.95rem;">5. Apply Fuel & Transmission selections</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Business Logic Separation</span>
+        <span>Slide 06</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>We created a custom React hook called 'useCarFilter'. This hook acts as the brain of the search system. It keeps track of search terms and filters, and returns a memoized array of cars. The filter sequence is a chain: it first filters by new/used tabs, then text queries, followed by brand, body type, fuel, gearbox, and price. Lifting this logic into a hook keeps our JSX code clean and reusable.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Solving State Collisions -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">UI Syncing & State Collisions</span>
+        <span class="slide-subtitle">Slide 07/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="cols-2">
+          <div class="col">
+            <h3 style="color: var(--accent-danger); margin-bottom: 8px;">The Challenge</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">Accumulated states on card clicks caused conflicting filters, returning zero search results (e.g. searching for a Tata SUV under 5 Lakhs).</p>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.4;">The SearchBox mode ('budget' vs 'brand') was out-of-sync with homepage quick card clicks.</p>
+          </div>
+          <div class="col">
+            <h3 style="color: var(--accent-success); margin-bottom: 8px;">The Solution</h3>
+            <ul class="success-list">
+              <li><strong>Lifted searchMode State:</strong> Relocated searchMode from local SearchBox state up to the primary custom hook.</li>
+              <li><strong>Self-Clearing Clicks:</strong> Handler clicks reset conflicting attributes:
+                <ul>
+                  <li style="font-size: 0.9rem; margin-top: 4px;">Clicking Brand clears budget/body type and sets searchMode to 'brand'.</li>
+                  <li style="font-size: 0.9rem;">Clicking Budget clears brand/body type and sets searchMode to 'budget'.</li>
+                  <li style="font-size: 0.9rem;">Clicking Body Type clears brand/budget.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Conflict Resolution</span>
+        <span>Slide 07</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>During development, we solved a critical state collision bug. When users clicked homepage categories, filters would accumulate and conflict, resulting in empty results (like selecting Tata and then looking for cars under 5 Lakh). To solve this, we synced the search mode state globally and updated our card click handlers. Now, clicking a category card automatically clears conflicting filters and updates the search box dropdown, ensuring a seamless, bug-free exploration experience.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Comparison Engine -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">The Comparison Engine</span>
+        <span class="slide-subtitle">Slide 08/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="cols-2">
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">The Comparison Tray</h3>
+            <ul>
+              <li><strong>Array State Limit:</strong> Holds a maximum of **3 cars** at a time to prevent viewport overflow.</li>
+              <li><strong>Interactive Alerts:</strong> Triggers alerts when limits are exceeded, guiding users to remove items to add new ones.</li>
+              <li><strong>Bottom Drawer:</strong> Floats sticky at the bottom, presenting selected car chips and clear options.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">Specification Grid Matrix</h3>
+            <ul>
+              <li>Displays comparison data side-by-side inside a modal overlay.</li>
+              <li>Compares models across: Price, Fuel type, Gearbox transmission, Mileage, Seating count, and Safety star ratings.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Interactive Grid Tool</span>
+        <span>Slide 08</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>The comparison engine is a major feature of Torque Talk. Users can select up to 3 cars. Once selected, a sticky comparison bar rises from the bottom of the viewport. Clicking 'Compare Now' triggers a full screen modal overlay that displays a clean grid contrasting specifications side-by-side. This helps buyers make immediate, data-driven decisions.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Theme Engine -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">Theme Engine & FOUC Prevention</span>
+        <span class="slide-subtitle">Slide 09/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="cols-2">
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">Global Theme Toggle</h3>
+            <ul>
+              <li>Header toggle switches themes across all components.</li>
+              <li>Stores choices in browser `localStorage` for preference persistence.</li>
+              <li>Dynamic theme application using CSS variables.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">Preventing Page Flicker</h3>
+            <ul>
+              <li><strong>FOUC (Flash of Unstyled Content):</strong> React themes load asynchronously, causing white flashes on reload.</li>
+              <li><strong>Blocking Render Script:</strong> Injected a small blocking script inside the HTML `<head>` tag.</li>
+              <li>Reads storage and applies the `data-theme` attribute *before* React loads.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Flicker-Free Theme Toggling</span>
+        <span>Slide 09</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>To deliver a premium feel, we built a global theme engine for light and dark modes. To solve the common issue where a page flashes white on reload in dark mode—known as Flash of Unstyled Content (FOUC)—we wrote a small, blocking script in the head of our index.html. This script reads the saved theme from the browser's storage and applies the data-theme attribute before React starts parsing, ensuring a seamless dark loading experience.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Performance Optimization -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">Performance & Core Concepts</span>
+        <span class="slide-subtitle">Slide 10/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="cols-2">
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">React Performance Optimization</h3>
+            <ul>
+              <li><strong>useMemo Hook:</strong> Memoizes the filtered cars array. Skips heavy recalculations on text typing unless dependencies update.</li>
+              <li><strong>Image Lazy Loading:</strong> Grid images use `loading="lazy"` to delay fetching until scrolling near them.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">JavaScript Syllabus Concepts</h3>
+            <ul>
+              <li><strong>ES6 Modules:</strong> Exporting/importing database entities and utilities.</li>
+              <li><strong>Arrays & Objects:</strong> Iterating lists using `.map()`, `.filter()`, and `.some()`.</li>
+              <li><strong>Destructuring:</strong> Destructuring states and properties.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Optimization & Standards</span>
+        <span>Slide 10</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>We optimized performance using React's 'useMemo' hook. The filtering algorithm only recalculates if the actual filters or search inputs change, preventing re-calculation lag on text changes. We also used image lazy loading. From a JavaScript standpoint, the project showcases modern ES6 modules, destructuring, template literals, and advanced array manipulation methods like filter, map, and some.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Conclusion -->
+  <div class="slide-wrapper">
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-title">Summary & Conclusion</span>
+        <span class="slide-subtitle">Slide 11/11</span>
+      </div>
+      <div class="slide-content">
+        <div class="cols-2">
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">Project Achievements</h3>
+            <ul class="success-list">
+              <li>Fully functional search, filter, and comparison flows.</li>
+              <li>Warning-free clean build with robust error margins.</li>
+              <li>Modular, clean codebase with proper code documentation.</li>
+              <li>Interactive spec sheet overlays and details modal.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3 style="color: var(--accent-color); margin-bottom: 10px;">Key Takeaways</h3>
+            <ul>
+              <li>Orchestrating sibling states in complex React trees.</li>
+              <li>Understanding rendering lifecycles and scroll control.</li>
+              <li>Optimizing page loading and render prevention.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Project Summary</span>
+        <span>Slide 11</span>
+      </div>
+    </div>
+    <div class="speaker-notes">
+      <div class="speaker-notes-title">Presenter Speaking Script:</div>
+      <p>To summarize, Torque Talk is a fully responsive, mobile-first web app that handles complex search and comparison logic. By using React's native state structures, custom hooks, and memoization, we created a fast, premium user experience. The codebase is clean, well-commented, and ready for evaluation. Thank you. I am open to any questions you may have.</p>
+    </div>
+  </div>
+
+</body>
+</html>
